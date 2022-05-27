@@ -32,6 +32,7 @@ function Form(props) {
 
   const formik = useFormik({
     initialValues: {
+      creatorId:"628f4c0c349bfff4ccd4fb2f",
       clientFirstName: '',
       clientLastName: '',
       nationalCode: '',
@@ -43,7 +44,7 @@ function Form(props) {
       sessionNumber: 0,
       sessionFee: '',
     },
-    onSubmit: values=>{
+    onSubmit: (values , { resetForm })=>{
        axios
       .post("http://188.121.120.127/form", {
         values
@@ -52,9 +53,7 @@ function Form(props) {
           "authorization": localStorage.getItem("token")
         }
       })
-      .then((values) => {
-        console.log(values);
-      });
+      resetForm();
     },
   });
   const spotSize = [
@@ -200,7 +199,8 @@ function Form(props) {
                     id="serviceDate"
                     value={formik.values.serviceDate}
                     onChange={(value) => {
-                      		formik.setFieldValue('serviceDate', Date.parse(value));
+                      let time=new Date(value);
+                      		formik.setFieldValue('serviceDate', time.toLocaleDateString('fa-IR'));
                       		}}
                     renderInput={(params) => <TextField {...params} />}
                   />
@@ -242,17 +242,17 @@ function Form(props) {
                 >
                   <FormControlLabel
                     value="female"
-                    name="Gender"
-                    control={<Radio name="Gender" value="female"/>}
+                    control={<Radio id="Gender" name="Gender" value="female"/>}
                     label="زن"
-                    onChange={handleSexualChange}
+                    onClick={handleSexualChange}
+                    onChange={formik.handleChange}
                   />
                   <FormControlLabel
                     value="male"
-                    name="Gender"
-                    control={<Radio name="Gender" value="male"/>}
+                    control={<Radio id="Gender" name="Gender" value="male"/>}
                     label="مرد"
-                    onChange={handleSexualChange}
+                    onClick={handleSexualChange}
+                    onChange={formik.handleChange}
                   />
                 </RadioGroup>
               </FormControl>
@@ -282,9 +282,10 @@ function Form(props) {
                         {women?.map((item) => (
                           <Grid item md={3} xs={6}>
                             <FormControlLabel
-                              control={<Checkbox />}
+                              control={<Checkbox  />}
                               label={item.name}
-                              name="Gender"
+                              name="bodyParts"
+                              onChange={formik.handleChange}
                               value={item.name}
                             />
                           </Grid>
@@ -318,10 +319,11 @@ function Form(props) {
                         {men?.map((item) => (
                           <Grid item md={3} xs={6}>
                             <FormControlLabel
-                              control={<Checkbox />}
+                              control={<Checkbox  />}
                               label={item.name}
-                              name="Gender"
+                              name="bodyParts"
                               value={item.name}
+                              onChange={formik.handleChange}
                             />
                           </Grid>
                         ))}
@@ -381,7 +383,7 @@ function Form(props) {
                     label="جوانسازی"
                     sx={{ fontFamily: "Yekan" }}
                     onClick={handleChange}
-                    
+                    onChange={formik.handleChange}                    
                   />
                   <FormControlLabel
                     name="laserKind"
@@ -391,6 +393,7 @@ function Form(props) {
                     label="موهای زائد"
                     sx={{ fontFamily: "Yekan" }}
                     onClick={handleChange}
+                    onChange={formik.handleChange}
                   />
                   <FormControlLabel
                     name="laserKind"
@@ -400,6 +403,7 @@ function Form(props) {
                     label="رفع تتو"
                     sx={{ fontFamily: "Yekan" }}
                     onClick={handleChange}
+                    onChange={formik.handleChange}
                   />
                   <FormControlLabel
                     name="laserKind"
@@ -409,6 +413,7 @@ function Form(props) {
                     label="زنان"
                     sx={{ fontFamily: "Yekan" }}
                     onClick={handleChange}
+                    onChange={formik.handleChange}
                   />
                 </RadioGroup>
               </FormControl>
