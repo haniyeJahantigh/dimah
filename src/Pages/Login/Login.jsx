@@ -3,6 +3,7 @@ import "./Login.css";
 import dimahLogo from "../../assets/img/dimah.jpeg"
 import axios from "axios";
 import { withRouter } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 function Login(props) {
   const [username, setUsername] = useState("");
@@ -10,9 +11,9 @@ function Login(props) {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const history = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.history.push("/dashboard");
     axios
       .post("http://188.121.120.127/login", {
         username: username,
@@ -20,7 +21,8 @@ function Login(props) {
       })
       .then((res) => {
         console.log(res);
-        
+        localStorage.setItem("token", res.data.token)
+        res.data.user.isAdmin ? history.push("/dashboard") : history.push("/form") 
       });
   };
   

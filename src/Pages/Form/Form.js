@@ -25,12 +25,42 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { men } from "../../data/areaData.js";
 import { women } from "../../data/areaData.js";
 import { styled } from "@mui/material/styles";
+import { useFormik } from 'formik';
+import axios from "axios";
+
 
 function Form(props) {
   const [value, setValue] = React.useState(new Date());
   const [kind, setKind] = React.useState("");
   const [sexual, setSexual] = React.useState("");
 
+  const formik = useFormik({
+    initialValues: {
+      clientFirstName: '',
+      clientLastName: '',
+      nationalCode: '',
+      serviceDate: Date.now(),
+      serviceTime: '',
+      Gender: '',
+      laserKind: '',
+      bodyParts: [],
+      sessionNumber: 0,
+      sessionFee: '',
+    },
+    onSubmit: values => {
+      axios
+      .post("http://188.121.120.127/form", {
+        values
+      },{
+        headers:{
+          "authorization": localStorage.getItem("token")
+        }
+      })
+      .then((res) => {
+        console.log(res);
+      });
+    },
+  });
   const spotSize = [
     { title: "single" },
     { title: 6 },
@@ -95,14 +125,16 @@ function Form(props) {
     <Grid container xs={12}>
       <Grid item xs={12}>
         <div className="w-100 d-flex justify-content-center align-items-center flex-wrap ">
-          <span className="brandName form-title w-100 text-center mt-5 h2">
+          <span className="brandName form-title w-100 text-center mt-5 h2 ">
             مرکز لیزر دیماه
           </span>
           <img src={logo} width="80px" className="logo " />
         </div>
       </Grid>
       <Grid item md={2} xs={0} />
+
       <Grid item md={8} xs={12} sx={{ mb: 5, mt: 5 }}>
+      <form onSubmit={formik.handleSubmit}>
         <Box
           sx={{ display: "flex", flexWrap: "wrap", direction: "rtl" }}
           className="form-main"
@@ -110,13 +142,16 @@ function Form(props) {
           <Grid container xs={12} spacing={2}>
             <Grid item xs={12} md={6}>
               <FormControl sx={{ m: 1 }} fullWidth variant="filled">
-                <InputLabel htmlFor="filled-adornment-customerName">
+                <InputLabel htmlFor="clientFirstName">
                   نام مشتری
                 </InputLabel>
                 <FilledInput
-                  id="filled-adornment-customerName"
+                  id="clientFirstName"
+                  name="clientFirstName"
                   type={"text"}
                   label="customerName"
+                  onChange={formik.handleChange}
+                  value={formik.values.clientFirstName}
                 />
               </FormControl>
             </Grid>
@@ -124,24 +159,30 @@ function Form(props) {
             {/* ====================================== =================== ===================  */}
             <Grid item xs={12} md={6}>
               <FormControl sx={{ m: 1 }} variant="filled" fullWidth>
-                <InputLabel htmlFor="filled-user-lastname">
+                <InputLabel htmlFor="clientLastName">
                   نام خانوادگی مشتری
                 </InputLabel>
                 <FilledInput
-                  id="filled-user-lastname"
+                  id="clientLastName"
+                  name="clientLastName"
                   type={"text"}
                   label="lastname"
+                  onChange={formik.handleChange}
+                  value={formik.values.clientLastName}
                 />
               </FormControl>
             </Grid>
             {/* ====================================== =================== ===================  */}
             <Grid item xs={12} md={6}>
               <FormControl fullWidth sx={{ m: 1 }} variant="filled">
-                <InputLabel htmlFor="filled-user-customerId">کد ملی</InputLabel>
+                <InputLabel htmlFor="nationalCode">کد ملی</InputLabel>
                 <FilledInput
-                  id="filled-user-customerId"
+                  id="nationalCode"
+                  name="nationalCode"
                   type={"text"}
                   label="customerId"
+                  onChange={formik.handleChange}
+                  value={formik.values.nationalCode}
                 />
               </FormControl>
             </Grid>
@@ -159,8 +200,12 @@ function Form(props) {
                 <LocalizationProvider dateAdapter={AdapterJalali}>
                   <DatePicker
                     label="تاریخ مراجعه"
-                    value={value}
-                    onChange={(newValue) => setValue(newValue)}
+                    name="serviceDate"
+                    id="serviceDate"
+                    value={formik.values.serviceDate}
+                      onChange={(value) => {
+                      		formik.setFieldValue('serviceDate', Date.parse(value));
+                      		}}
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
@@ -169,8 +214,12 @@ function Form(props) {
             {/* ====================================== =================== ===================  */}
             <Grid item xs={12}>
               <FormControl sx={{ m: 1 }} fullWidth variant="filled">
-                <InputLabel htmlFor="filled-user-time">ساعت مراجعه</InputLabel>
-                <FilledInput id="filled-user-time" type={"hour"} label="time" />
+                <InputLabel htmlFor="serviceTime">ساعت مراجعه</InputLabel>
+                <FilledInput id="serviceTime" type={"hour"} label="time" 
+                name="serviceTime" 
+                onChange={formik.handleChange}
+                  value={formik.values.serviceTime}
+                  />
               </FormControl>
             </Grid>
             {/* ====================================== =================== ===================  */}
@@ -197,12 +246,14 @@ function Form(props) {
                 >
                   <FormControlLabel
                     value="female"
+                    name="Gender"
                     control={<Radio />}
                     label="زن"
                     onChange={handleSexualChange}
                   />
                   <FormControlLabel
                     value="male"
+                    name="Gender"
                     control={<Radio />}
                     label="مرد"
                     onChange={handleSexualChange}
@@ -237,6 +288,8 @@ function Form(props) {
                             <FormControlLabel
                               control={<Checkbox />}
                               label={item.name}
+                              name="Gender"
+                              value={item.name}
                             />
                           </Grid>
                         ))}
@@ -271,6 +324,8 @@ function Form(props) {
                             <FormControlLabel
                               control={<Checkbox />}
                               label={item.name}
+                              name="Gender"
+                              value={item.name}
                             />
                           </Grid>
                         ))}
@@ -284,16 +339,19 @@ function Form(props) {
             <Grid item xs={12}>
               <FormControl sx={{ m: 1 }} fullWidth variant="filled">
                 <InputLabel
-                  htmlFor="filled-user-lastname"
+                  htmlFor="sessionNumber"
                   sx={{ fontFamily: "Yekan" }}
                 >
                   شماره جلسه
                 </InputLabel>
                 <FilledInput
-                  id="filled-user-lastname"
+                  id="sessionNumber"
                   type={"text"}
+                  name="sessionNumber"
                   label="Password"
                   sx={{ fontFamily: "Yekan" }}
+                  onChange={formik.handleChange}
+                  value={formik.values.sessionNumber}
                 />
               </FormControl>
             </Grid>
@@ -309,43 +367,52 @@ function Form(props) {
                 }}
               >
                 <FormLabel
-                  id="demo-row-radio-buttons-group-label"
+                  id="laserKind"
                   sx={{ fontFamily: "Yekan", mr: 2 }}
                 >
                   نوع لیزر*
                 </FormLabel>
                 <RadioGroup
                   row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  aria-labelledby="laserKind"
                   name="row-radio-buttons-group"
                 >
                   <FormControlLabel
+                    name="laserKind"
+                    id="laserKind"
                     value="javansazi"
                     control={<Radio />}
                     label="جوانسازی"
                     sx={{ fontFamily: "Yekan" }}
-                    onChange={handleChange}
+                    onClick={handleChange}
+                    
                   />
                   <FormControlLabel
+                    name="laserKind"
+                    id="laserKind"
                     value="moo-zaed"
                     control={<Radio />}
                     label="موهای زائد"
                     sx={{ fontFamily: "Yekan" }}
-                    onChange={handleChange}
+                    onClick={handleChange}
                   />
                   <FormControlLabel
+                    name="laserKind"
+                    id="laserKind"
                     value="tatoo"
                     control={<Radio />}
                     label="رفع تتو"
                     sx={{ fontFamily: "Yekan" }}
-                    onChange={handleChange}
+                    onClick={handleChange}
                   />
                   <FormControlLabel
+                    name="laserKind"
+                    id="laserKind"
                     value="female"
                     control={<Radio />}
                     label="زنان"
                     sx={{ fontFamily: "Yekan" }}
-                    onChange={handleChange}
+                    onClick={handleChange}
                   />
                 </RadioGroup>
               </FormControl>
@@ -799,16 +866,19 @@ function Form(props) {
             {/* ====================================== =================== ===================  */}
             <FormControl sx={{ m: 1 }} fullWidth variant="filled">
               <InputLabel
-                htmlFor="filled-user-lastname"
+                htmlFor="sessionFee"
                 sx={{ fontFamily: "Yekan" }}
               >
                 هزینه جلسه
               </InputLabel>
               <FilledInput
-                id="filled-user-lastname"
+                id="sessionFee"
+                name="sessionFee"
                 type={"text"}
                 label="Password"
                 sx={{ fontFamily: "Yekan" }}
+                onChange={formik.handleChange}
+                value={formik.values.sessionFee}
               />
             </FormControl>
             {/* ====================================== =================== ===================  */}
@@ -816,11 +886,13 @@ function Form(props) {
               variant="contained"
               fullWidth
               sx={{ bgcolor: "rgb(191, 141, 56)", m: 1, fontFamily: "Yekan" }}
+              type="submit"
             >
               ثبت
             </Button>
           </Grid>
         </Box>
+      </form>
       </Grid>
       <Grid item md={2} xs={0} />
     </Grid>
