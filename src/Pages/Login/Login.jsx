@@ -13,24 +13,17 @@ function Login(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     props.history.push("/dashboard");
-    // axios
-    //   .post("http://localhost:1337/auth/local", {
-    //     identifier: username,
-    //     password: password,
-    //   })
-    //   .then((res) => {
-    //     if (res.status === 200) {
-    //       setError(false);
-    //       console.log(res.status);
-    //       localStorage.setItem("token", res.data.jwt);
-    //       localStorage.setItem("USID", res.data.user.id);
-    //       props.history.push("/dashboard");
-    //     } else {
-    //       setError(true);
-    //       setErrorMessage("نام کاربری یا رمز عبور شما اشتباه است");
-    //     }
-    //   });
+    axios
+      .post("http://188.121.120.127/login", {
+        username: username,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res);
+        
+      });
   };
+  
   const handleUsername = (e) => {
     setUsername(e.target.value);
   };
