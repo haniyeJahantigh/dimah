@@ -1,10 +1,12 @@
 import './App.css';
-import Login from './Pages/Login/Login'
 import {BrowserRouter as Router , Route , Switch} from 'react-router-dom'
 import dashRoute from './Routes/dashboard.Routes';
+import { ThemeProvider } from '@mui/material/styles';
+import {theme} from "../src/theme/index"
 
 function App() {
   return (
+    <ThemeProvider theme={theme}>
     <div className="App">
       <Router>
         <Switch>
@@ -21,6 +23,7 @@ function App() {
         </Switch>
       </Router>
     </div>
+    </ThemeProvider>
   );
 }
 

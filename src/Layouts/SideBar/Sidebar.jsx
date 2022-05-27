@@ -1,32 +1,27 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import logo from "../../assets/img/logo.png";
-import {FaCashRegister, FaChartPie, FaCloudscale, FaDoorClosed, FaShoppingBasket, FaStore} from 'react-icons/fa'
+import logo from "../../assets/img/dimah.jpeg";
+import {FaCloudscale,FaUserPlus,FaIdCard} from 'react-icons/fa'
 
 function Sidebar(props) {
   return (
     <div className="h-100 sidebar  flex-wrap">
-      <div className="LogoPosition d-flex justify-content-center align-items-center">
-        <img src={logo} width="40px" className="logo" />
-        <span className="brandName text-light">کای دای</span>
+      <div className="LogoPosition d-flex justify-content-center align-items-center flex-wrap mt-2">
+        <img src={logo} width="60px" className="logo" />
+        <span className="brandName text-light w-100 text-center mt-2">مرکز تخصصی دیماه</span>
       </div>
       <div className="Menu">
         <ul>
           <NavLink className="li" exact to="/dashboard" activeClassName="activeMenu">
             <FaCloudscale className="sidebarMenuIcon"/> داشبورد
           </NavLink>
-          <NavLink  className="li" to="/dashboard/product" activeClassName="activeMenu">
-          <FaShoppingBasket className="sidebarMenuIcon"/> مدیریت محصولات
+          <NavLink className="li" exact to="/dashboard/adduser" activeClassName="activeMenu">
+            <FaUserPlus className="sidebarMenuIcon"/> ایجاد اپراتور
           </NavLink>
-          <NavLink  className="li" to="/dashboard/producs" activeClassName="activeMenu">
-          <FaStore className="sidebarMenuIcon"/> مدیریت فروشگاه ها
+          <NavLink className="li" exact to="/dashboard/users" activeClassName="activeMenu">
+            <FaIdCard className="sidebarMenuIcon"/> نمایش اپراتورها
           </NavLink>
-          <NavLink  className="li" to="/dashboard/produts" activeClassName="activeMenu">
-          <FaCashRegister className="sidebarMenuIcon"/> مدیریت فروش
-          </NavLink>
-          <NavLink  className="li" to="/dashboard/reports" activeClassName="activeMenu">
-          <FaChartPie className="sidebarMenuIcon"/> گزارشات
-          </NavLink>
+  
         </ul>
       </div>
       <div className="support">

@@ -1,15 +1,12 @@
 .login{
-    background-color: rgb(255, 229, 195);
+    background-color: rgb(191, 141, 56);
 }
 .loginForm{
-    width: 20rem;
+    width: 25rem;
     height: 23rem;
     background-color: white;
-    border-radius: 5px;
-    box-shadow: 4px 4px 10px lightgray;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    flex-wrap: wrap;
+    border-radius: 15px;
+    box-shadow: 4px 4px 10px rgb(245, 231, 207);
+    padding: 3rem;
+    
 }

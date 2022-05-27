@@ -4,10 +4,10 @@ function Header() {
     return (
         <div className="Header">
             <div>
-                <a>داشبورد</a>
+                {/* <a>داشبورد</a> */}
             </div>
             <div>
-                سلام مسعود
+                داشبورد مدیریت مرکز تخصصی دیماه
             </div>
         </div>
     )

@@ -1,10 +1,10 @@
+import AddUser from "../Pages/dashboard/AddUser/AddUser";
 import DashHome from "../Pages/dashboard/DashHome/DashHome";
-import ManageProducts from "../Pages/dashboard/ManageProducts/ManageProducts";
-import Reports from "../Pages/dashboard/Reports/Reports";
+import Users from "../Pages/dashboard/Users/Users"
 
 const dashMain= [
     {path:"/dashboard" , exact:true , Component : DashHome},
-    {path:"/dashboard/reports" , exact:true , Component : Reports},
-    {path:"/dashboard/products" , exact:true , Component : ManageProducts},
+    {path:"/dashboard/adduser" , exact:true , Component : AddUser},
+    {path:"/dashboard/users" , exact:true , Component : Users},
 ]
 export default dashMain;
