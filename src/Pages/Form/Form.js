@@ -15,22 +15,18 @@ import {
   FormGroup,
   Button,
   Autocomplete,
-  Stack,
   Grid,
-  Typography,
 } from "@mui/material";
 import AdapterJalali from "@date-io/date-fns-jalali";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { men } from "../../data/areaData.js";
 import { women } from "../../data/areaData.js";
-import { styled } from "@mui/material/styles";
 import { useFormik } from 'formik';
 import axios from "axios";
 
 
 function Form(props) {
-  const [value, setValue] = React.useState(new Date());
   const [kind, setKind] = React.useState("");
   const [sexual, setSexual] = React.useState("");
 
@@ -47,8 +43,8 @@ function Form(props) {
       sessionNumber: 0,
       sessionFee: '',
     },
-    onSubmit: values => {
-      axios
+    onSubmit: values=>{
+       axios
       .post("http://188.121.120.127/form", {
         values
       },{
@@ -56,8 +52,8 @@ function Form(props) {
           "authorization": localStorage.getItem("token")
         }
       })
-      .then((res) => {
-        console.log(res);
+      .then((values) => {
+        console.log(values);
       });
     },
   });
@@ -203,7 +199,7 @@ function Form(props) {
                     name="serviceDate"
                     id="serviceDate"
                     value={formik.values.serviceDate}
-                      onChange={(value) => {
+                    onChange={(value) => {
                       		formik.setFieldValue('serviceDate', Date.parse(value));
                       		}}
                     renderInput={(params) => <TextField {...params} />}
@@ -242,19 +238,19 @@ function Form(props) {
                 <RadioGroup
                   row
                   aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
+                  name="Gender"
                 >
                   <FormControlLabel
                     value="female"
                     name="Gender"
-                    control={<Radio />}
+                    control={<Radio name="Gender" value="female"/>}
                     label="زن"
                     onChange={handleSexualChange}
                   />
                   <FormControlLabel
                     value="male"
                     name="Gender"
-                    control={<Radio />}
+                    control={<Radio name="Gender" value="male"/>}
                     label="مرد"
                     onChange={handleSexualChange}
                   />
